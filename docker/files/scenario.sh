@@ -29,7 +29,7 @@ if [[ ! -f $CONFIG/map-settings.json ]]; then
   cp /opt/factorio/data/map-settings.example.json "$CONFIG/map-settings.json"
 fi
 
-exec /opt/factorio/bin/x64/factorio \
+exec /usr/local/bin/box64 /opt/factorio/bin/x64/factorio \
   --port "$PORT" \
   --start-server-load-scenario "$SERVER_SCENARIO" \
   --map-gen-settings "$CONFIG/map-gen-settings.json" \

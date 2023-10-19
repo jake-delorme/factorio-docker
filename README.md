@@ -1,6 +1,8 @@
+# Visit the upstream
+This image adds support for ARM64 with the power of [box64](https://github.com/ptitSeb/box64) using a pre-built binary from  [@ryanfortner](https://github.com/ryanfortner)'s apt repository. This is using the RaspberryPi4 optimized binary
+
 # Factorio [![Docker Version](https://img.shields.io/docker/v/factoriotools/factorio?sort=semver)](https://hub.docker.com/r/factoriotools/factorio/) [![Docker Pulls](https://img.shields.io/docker/pulls/factoriotools/factorio.svg?maxAge=600)](https://hub.docker.com/r/factoriotools/factorio/) [![Docker Stars](https://img.shields.io/docker/stars/factoriotools/factorio.svg?maxAge=600)](https://hub.docker.com/r/factoriotools/factorio/)
 
-[中文](./README_zh_CN.md)
 
 <!-- start autogeneration tags -->
 * `1.1.99`

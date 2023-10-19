@@ -23,5 +23,5 @@ if [[ ! -f $CONFIG/map-settings.json ]]; then
   cp /opt/factorio/data/map-settings.example.json "$CONFIG/map-settings.json"
 fi
 
-exec /opt/factorio/bin/x64/factorio \
+exec /usr/local/bin/box64 /opt/factorio/bin/x64/factorio \
   --scenario2map "$SERVER_SCENARIO"

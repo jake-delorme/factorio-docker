@@ -1,4 +1,4 @@
-FROM frolvlad/alpine-glibc:alpine-3.12
+FROM ubuntu:latest
 
 LABEL maintainer="https://github.com/factoriotools/factorio-docker"
 
@@ -24,11 +24,12 @@ ENV PORT=34197 \
     SCENARIOS=/factorio/scenarios \
     SCRIPTOUTPUT=/factorio/script-output \
     PUID="$PUID" \
-    PGID="$PGID"
+    PGID="$PGID" \
+    VERSION="1.1.91" \
+    SHA256="2288b21afb1d96aa06712a2ae2e31b9c45f0aa4a2e9dec041125d874f0781f6d"
 
-SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
-RUN set -ox pipefail \
-    && if [[ "${VERSION}" == "" ]]; then \
+SHELL ["/bin/bash", "-c"]
+RUN if [[ "${VERSION}" == "" ]]; then \
         echo "build-arg VERSION is required" \
         && exit 1; \
     fi \
@@ -38,7 +39,12 @@ RUN set -ox pipefail \
     fi \
     && archive="/tmp/factorio_headless_x64_$VERSION.tar.xz" \
     && mkdir -p /opt /factorio \
-    && apk add --update --no-cache --no-progress bash binutils curl file gettext jq libintl pwgen shadow su-exec \
+    && apt update \
+    && apt install -y xz-utils bash binutils wget gpg curl file gettext jq pwgen \
+    && wget https://ryanfortner.github.io/box64-debs/box64.list -O /etc/apt/sources.list.d/box64.list \
+    && wget -qO- https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box64-debs-archive-keyring.gpg \
+    && apt update \
+    && apt install box64-rpi4arm64 -y \
     && curl -sSL "https://www.factorio.com/get-download/$VERSION/headless/linux64" -o "$archive" --retry $CURL_RETRIES\
     && echo "$SHA256  $archive" | sha256sum -c \
     || (sha256sum "$archive" && file "$archive" && exit 1) \
@@ -48,8 +54,8 @@ RUN set -ox pipefail \
     && ln -s "$SCENARIOS" /opt/factorio/scenarios \
     && ln -s "$SAVES" /opt/factorio/saves \
     && mkdir -p /opt/factorio/config/ \
-    && addgroup -g "$PGID" -S "$GROUP" \
-    && adduser -u "$PUID" -G "$GROUP" -s /bin/sh -SDH "$USER" \
+    && addgroup --gid "$PGID" "$GROUP" \
+    && adduser --uid "$PUID" --ingroup "$GROUP" --shell /bin/bash --system "$USER" \
     && chown -R "$USER":"$GROUP" /opt/factorio /factorio
 
 COPY files/*.sh /
