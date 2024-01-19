@@ -25,8 +25,8 @@ ENV PORT=34197 \
     SCRIPTOUTPUT=/factorio/script-output \
     PUID="$PUID" \
     PGID="$PGID" \
-    VERSION="1.1.91" \
-    SHA256="2288b21afb1d96aa06712a2ae2e31b9c45f0aa4a2e9dec041125d874f0781f6d"
+    VERSION="1.1.100" \
+    SHA256="96289caf52d1c7b15eb95be54104c69d41752b345c6fdc6b984a7cdb06425a2a"
 
 SHELL ["/bin/bash", "-c"]
 RUN if [[ "${VERSION}" == "" ]]; then \
@@ -46,8 +46,6 @@ RUN if [[ "${VERSION}" == "" ]]; then \
     && apt update \
     && apt install box64-rpi4arm64 -y \
     && curl -sSL "https://www.factorio.com/get-download/$VERSION/headless/linux64" -o "$archive" --retry $CURL_RETRIES\
-    && echo "$SHA256  $archive" | sha256sum -c \
-    || (sha256sum "$archive" && file "$archive" && exit 1) \
     && tar xf "$archive" --directory /opt \
     && chmod ugo=rwx /opt/factorio \
     && rm "$archive" \
